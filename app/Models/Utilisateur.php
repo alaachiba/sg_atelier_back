@@ -30,8 +30,11 @@ class Utilisateur extends Authenticatable
         return $this->hasMany(Atelier::class, 'formateur_id');
     }
 
+
+    
     public function inscriptions()
     {
-        return $this->belongsToMany(Atelier::class, 'inscriptions', 'utilisateur_id', 'atelier_id');
+        return $this->belongsToMany(Atelier::class, 'inscriptions', 'utilisateur_id', 'atelier_id')
+                    ->withTimestamps();
     }
 }

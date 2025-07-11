@@ -10,21 +10,31 @@ class AtelierController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
 {
-    $user = $request->user();
-    \Log::info('User connecté : ' . $user->id . ', rôle : ' . $user->role);
-
-    if ($user->role === 'admin') {
-        $ateliers = Atelier::all();
-    } elseif ($user->role === 'formateur') {
-        $ateliers = Atelier::where('formateur_id', $user->id)->get();
-    } else {
-        return response()->json(['message' => 'Accès non autorisé.'], 403);
-    }
+    $ateliers = Atelier::with('formateur')->get();
 
     return response()->json($ateliers);
 }
+
+//     public function index(Request $request)
+// {
+//     //$user = $request->user();
+
+//     // if (!$user) {
+//     //     return response()->json(['message' => 'Non authentifié'], 401);
+//     // }
+
+//     // if ($user->role === 'admin') {
+//     //     $ateliers = Atelier::with('formateur')->get();
+//     // } elseif ($user->role === 'formateur') {
+//     //     $ateliers = Atelier::where('formateur_id', $user->id)->get();
+//     // } else {
+//     //     return response()->json(['message' => 'Accès non autorisé.'], 403);
+//     // }
+
+//     return response()->json($ateliers);
+// }
 
     /**
      * Store a newly created resource in storage.
@@ -95,6 +105,7 @@ class AtelierController extends Controller
 
         return response()->json(['message' => 'Atelier supprimé']);
     }
+
 
     public function participants($id, Request $request)
 {

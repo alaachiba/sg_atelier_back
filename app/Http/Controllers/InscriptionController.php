@@ -66,15 +66,58 @@ class InscriptionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    // public function destroy(string $id)
+    // {
+    //     $inscription = Inscription::find($id);
+    //     if (!$inscription) {
+    //         return response()->json(['message' => 'Inscription non trouvée'], 404);
+    //     }
+
+    //     $inscription->delete();
+
+    //     return response()->json(['message' => 'Inscription supprimée']);
+    // }
+
+    public function destroy($atelierId, Request $request)
+{
+    $user = $request->user();
+
+    // Cherche l'inscription liée à cet atelier pour cet utilisateur
+    $inscription = $user->inscriptions()->where('atelier_id', $atelierId)->first();
+    if (!$inscription) {
+        return response()->json(['message' => 'Inscription non trouvée.'], 404);
+    }
+
+    // Supprime la relation (annule l'inscription)
+    $user->inscriptions()->detach($atelierId);
+
+    return response()->json(['message' => 'Inscription annulée avec succès.']);
+}
+
+    public function mesInscriptions(Request $request)
     {
-        $inscription = Inscription::find($id);
+        $user = $request->user();
+        $inscriptions = $user->inscriptions()->with('formateur')->get();
+        return response()->json($inscriptions);
+    }
+
+    public function destroyByAtelier(Request $request, $atelierId)
+    {
+        $user = $request->user();
+
+        // Chercher l'inscription qui correspond au participant et à l'atelier
+        $inscription = Inscription::where('utilisateur_id', $user->id)
+                                  ->where('atelier_id', $atelierId)
+                                  ->first();
+
         if (!$inscription) {
             return response()->json(['message' => 'Inscription non trouvée'], 404);
         }
 
         $inscription->delete();
 
-        return response()->json(['message' => 'Inscription supprimée']);
+        return response()->json(['message' => 'Inscription annulée avec succès']);
     }
+
 }
+

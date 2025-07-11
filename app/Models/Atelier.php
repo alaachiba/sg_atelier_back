@@ -25,7 +25,8 @@ class Atelier extends Model
 
     public function participants()
     {
-        return $this->belongsToMany(Utilisateur::class, 'inscriptions', 'atelier_id', 'utilisateur_id');
+        return $this->belongsToMany(Utilisateur::class, 'inscriptions', 'atelier_id', 'utilisateur_id')
+                ->withTimestamps();
     }
 
     public function publicIndex()
