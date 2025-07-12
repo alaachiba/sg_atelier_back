@@ -1,66 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Gestion Ateliers - Backend Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+## 📄 Description
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Backend Laravel pour la gestion des ateliers, des utilisateurs, des inscriptions avec authentification via Sanctum (token API).  
+Base de données MySQL nommée `sg_atelier1`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Technologies utilisées
 
-## Learning Laravel
+- Laravel 10
+- PHP 8+
+- MySQL (base `sg_atelier1`)
+- Laravel Sanctum pour authentification API
+- Eloquent ORM
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🗄️ Base de données
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Nom : `sg_atelier1`
 
-## Laravel Sponsors
+Contient les tables principales :
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- `utilisateurs` (id, nom, prenom, email, mot_de_passe, role, timestamps)
+- `ateliers` (id, titre, description, date_debut, date_fin, lieu, formateur_id, timestamps)
+- `inscriptions` (id, atelier_id, utilisateur_id, timestamps)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## 🚀 Installation et configuration
 
-## Contributing
+1. Cloner le dépôt backend :
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone <URL_DU_DEPOT_BACKEND>
+cd nom-du-projet-backend
+Installer les dépendances composer :
+```
 
-## Code of Conduct
+```bash
+Copier
+Modifier
+composer install
+Copier le fichier .env.example en .env et configurer la connexion à la base MySQL :
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sg_atelier1
+DB_USERNAME=ton_utilisateur
+DB_PASSWORD=ton_mot_de_passe
+Générer la clé d’application :
 
-## Security Vulnerabilities
+```bash
+php artisan key:generate
+```
+Lancer les migrations pour créer les tables :
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan migrate
+```
+(Optionnel) Lancer les seeders si disponibles :
 
-## License
+```bash
+php artisan db:seed
+```
+Lancer le serveur Laravel :
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan serve
+L’API sera accessible par défaut sur http://localhost:8000.
+```
+
+🔐 Authentification
+Utilisation de Laravel Sanctum pour la gestion des tokens API.
+
+Routes protégées par middleware auth:sanctum et contrôle des rôles (admin, formateur, participant).
+
+🚦 Routes principales
+POST /api/register - Inscription utilisateur
+
+POST /api/login - Connexion utilisateur
+
+POST /api/logout - Déconnexion (authentifié)
+
+GET /api/ateliers - Liste des ateliers
+
+GET /api/ateliers/{id} - Détails atelier avec formateur et participants
+
+POST /api/ateliers - Créer un atelier (admin/formateur)
+
+PUT /api/ateliers/{id} - Modifier atelier (admin/formateur)
+
+DELETE /api/ateliers/{id} - Supprimer atelier (admin/formateur)
+
+GET /api/ateliers/{id}/participants - Liste des participants (admin/formateur)
+
+GET /api/formateurs - Liste des formateurs (admin)
+
+GET /api/utilisateurs - Gestion utilisateurs (admin)
+
+POST /api/inscriptions - S’inscrire à un atelier (participant)
+
+DELETE /api/inscriptions/atelier/{atelierId} - Désinscription (participant)
+
+📚 Structure du projet
+pgsql
+Copier
+Modifier
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── AuthController.php
+│   │   ├── AtelierController.php
+│   │   ├── UtilisateurController.php
+│   │   └── InscriptionController.php
+│   └── Middleware/
+├── Models/
+│   ├── Atelier.php
+│   ├── Utilisateur.php
+│   └── Inscription.php
+database/
+├── migrations/
+└── seeders/
+routes/
+└── api.php
