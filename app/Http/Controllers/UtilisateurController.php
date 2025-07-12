@@ -89,4 +89,10 @@ class UtilisateurController extends Controller
 
         return response()->json(['message' => 'Utilisateur supprimé']);
     }
+
+    public function getFormateurs()
+    {
+        $formateurs = Utilisateur::where('role', 'formateur')->get(['id', 'nom', 'prenom']);
+        return response()->json($formateurs);
+    }
 }

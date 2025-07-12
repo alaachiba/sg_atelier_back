@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('utilisateurs', UtilisateurController::class);
         Route::delete('/inscriptions/{atelier}', [InscriptionController::class, 'destroyByAtelier']);
+        Route::get('/formateurs', [UtilisateurController::class, 'getFormateurs']);
     });
 
     // Ateliers - admin & formateur
